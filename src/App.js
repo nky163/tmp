@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {FormEvent, useState} from 'react'
 
-function App() {
+const App = () => {
+  const [taskArray, setTaskArray] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+  }
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setTaskArray((preTaskArray) => [{content: inputValue}, ...preTaskArray]);
+    setInputValue('');
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="task-input">TODO</label>
+        <input
+          id="task-input"
+          value={inputValue}
+          onChange={handleChange}
+        />
+        <button type="submit" onClick={handleSubmit}>Add</button>
+      </form>
+      {taskArray.length === 0 ? (
+        <div>Empty</div>
+      ) : (
+        taskArray.map((task, i) => (
+          <div key={i}>{task.content}</div>
+        ))
+      )}
     </div>
   );
-}
+};
 
 export default App;
